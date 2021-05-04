@@ -48,9 +48,13 @@ function stepEmu() {
     if (step == 0) {
         prepareEmu();
     }
-    resetRegs();
+    // resetRegs();
     step++;
-    e.emu_start(begin, until, 0, step);   
+    var rip = e.reg_read_i64(uc.X86_REG_RIP)
+    if (step != 1) {
+        begin = rip
+    }
+    e.emu_start(begin, until, 0, 1);
     displayRegs();
 }
 
