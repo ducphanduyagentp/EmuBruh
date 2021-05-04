@@ -3,6 +3,7 @@ var result = [];
 var begin;
 var until;
 var step = 0;
+var code;
 var is_init = false;
 
 function prepareEmu() {
@@ -17,7 +18,7 @@ function prepareEmu() {
     a.option(ks.OPT_SYNTAX, ks.OPT_SYNTAX_INTEL);
 
     result = [];
-    var code = a.asm(assembly);
+    code = a.asm(assembly);
     assembly = assembly.replace(/\n*$/, '').split('\n')
 
     for (var i = 0; i < assembly.length; i++) {
@@ -29,13 +30,7 @@ function prepareEmu() {
 
     var addr = 0x10000;
 
-    // Write registers and memory
-    e.reg_write_i64(uc.X86_REG_RAX, 0x0);
-    e.reg_write_i64(uc.X86_REG_RBX, 0x0);
-    e.reg_write_i64(uc.X86_REG_RCX, 0x0);
-    e.reg_write_i64(uc.X86_REG_RDX, 0x0);
-    e.reg_write_i64(uc.X86_REG_RSI, 0x0);
-    e.reg_write_i64(uc.X86_REG_RDI, 0x0);
+    resetRegs();
 
     e.mem_map(addr, 4*1024, uc.PROT_ALL);
     e.mem_write(addr, code)
@@ -53,6 +48,7 @@ function stepEmu() {
     if (step == 0) {
         prepareEmu();
     }
+    resetRegs();
     step++;
     e.emu_start(begin, until, 0, step);   
     displayRegs();
@@ -83,4 +79,14 @@ function resetEmu() {
     $("#reg_rdx").html(0);
     $("#reg_rdi").html(0);
     $("#reg_rsi").html(0);
+}
+
+function resetRegs() {
+    // Write registers and memory
+    e.reg_write_i64(uc.X86_REG_RAX, 0x0);
+    e.reg_write_i64(uc.X86_REG_RBX, 0x0);
+    e.reg_write_i64(uc.X86_REG_RCX, 0x0);
+    e.reg_write_i64(uc.X86_REG_RDX, 0x0);
+    e.reg_write_i64(uc.X86_REG_RSI, 0x0);
+    e.reg_write_i64(uc.X86_REG_RDI, 0x0);
 }
