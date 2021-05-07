@@ -1,10 +1,10 @@
 <html>
     <title>Emu Bruh</title>
     <head>
-        <script src="jquery-3.6.0.min.js" defer></script>
-        <script src="keystone.min.js" defer></script>
-        <script src="unicorn.min.js" defer></script>
-        <script src="main.js"></script>
+        <script type="text/javascript" src="jquery-3.6.0.min.js" defer></script>
+        <script type="text/javascript" src="pasm.min.js" defer></script>
+        <script type="text/javascript" src="unicorn.min.js" defer></script>
+        <script type="text/javascript" src="main.js"></script>
         <style>
             .regs {
                 display: inline-block;
@@ -13,7 +13,7 @@
     </head>
     <body>
         <div>
-            <textarea id="input_asm" rows="20" cols="50"></textarea>
+            <textarea id="input_asm" rows="20" cols="50">[bits 64]</textarea>
             <br><br>
             <div>
                 RAX = <div class="regs" id="reg_rax">0</div>

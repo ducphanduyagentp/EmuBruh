@@ -5,6 +5,7 @@ var until;
 var step = 0;
 var code;
 var is_init = false;
+var asm_code = ""
 
 function prepareEmu() {
     if (!is_init) {
@@ -14,19 +15,11 @@ function prepareEmu() {
 
     var assembly = $("#input_asm").val();
 
-    var a = new ks.Keystone(ks.ARCH_X86, ks.MODE_64);
-    a.option(ks.OPT_SYNTAX, ks.OPT_SYNTAX_INTEL);
-
-    result = [];
-    code = a.asm(assembly);
-    assembly = assembly.replace(/\n*$/, '').split('\n')
-
-    for (var i = 0; i < assembly.length; i++) {
-        asm_line = a.asm(assembly[i]);
-        result.push(asm_line);
+    asm_code = pasm.parse(assembly).data;
+    code = [];
+    for (var i = 0; i < asm_code.length; i += 2) {
+        code.push(parseInt(asm_code.slice(i, i + 2), 16))
     }
-
-    a.close();
 
     var addr = 0x10000;
 
@@ -39,6 +32,7 @@ function prepareEmu() {
 }
 
 function runEmu() {
+    resetEmu();
     prepareEmu();
     e.emu_start(begin, until, 0, 0);
     displayRegs();
